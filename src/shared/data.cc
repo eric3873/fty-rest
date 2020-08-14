@@ -457,6 +457,32 @@ static db_reply_t deleteAsset(tntdb::Connection& conn, const ElementInfo& item)
     }
 }
 
+
+static void children(std::vector<ElementInfo>& items, uint32_t parent, std::vector<ElementInfo>& ret) {
+    for (auto it = items.begin(); it != items.end();) {
+        if (it->el.parent_id == parent) {
+            ret.push_back(*it);
+            children(items, it->el.id, ret);
+            items.erase(it);
+        } else {
+            ++it;
+        }
+    }
+}
+
+static std::vector<ElementInfo> sort(std::vector<ElementInfo>& items) {
+    std::vector<ElementInfo> ret;
+
+    children(items, 0, ret);
+
+    std::reverse(ret.begin(), ret.end());
+    for(const auto& it: items) {
+        ret.push_back(it);
+    }
+
+    return ret;
+}
+
 std::vector<std::pair<uint32_t, db_reply_t>> asset_manager::delete_item(
     const std::vector<uint32_t>& ids, std::vector<db_a_elmnt_t>& element_info)
 {
@@ -525,39 +551,7 @@ std::vector<std::pair<uint32_t, db_reply_t>> asset_manager::delete_item(
         }
     }
 
-    auto isLinked = [&](const ElementInfo& item, const ElementInfo& parent) {
-        auto isLinked = std::find(item.links.begin(), item.links.end(), parent.el.id);
-        if (isLinked != item.links.end()) {
-            return false;
-        }
-
-        auto isPLinked = std::find(parent.links.begin(), parent.links.end(), item.el.id);
-        if (isPLinked != parent.links.end()) {
-            return true;
-        }
-        return false;
-    };
-
-    auto isAnyParent = [&](const ElementInfo& item, const ElementInfo& parent) {
-        auto p = parent;
-        while(true) {
-            if (item.el.parent_id == p.el.id) {
-                return true;
-            }
-
-            auto it = std::find_if(toDel.begin(), toDel.end(), [&](const ElementInfo& it) {
-                return it.el.id == p.el.parent_id;
-            });
-            if (it == toDel.end()) {
-                return false;
-            }
-            p = *it;
-        }
-    };
-
-    std::sort(toDel.begin(), toDel.end(), [&](const ElementInfo& l, const ElementInfo& r) {
-        return isAnyParent(l, r) || isLinked(l, r);
-    });
+    toDel = sort(toDel);
 
     for (const auto& item : toDel) {
         try {
