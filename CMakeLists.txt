@@ -10,13 +10,15 @@ project(fty_rest
 set(PROJECT_NAME_HYPHEN fty-rest)
 
 ##############################################################################################################
-find_package(fty-cmake PATHS ${CMAKE_BINARY_DIR}/fty-cmake)
+find_package(fty-cmake      PATHS ${CMAKE_BINARY_DIR}/fty-cmake)
+find_package(fty-cmake-rest PATHS ${CMAKE_BINARY_DIR}/fty-cmake-rest)
 ##############################################################################################################
 
 # Define the servlet
 etn_target(shared ${PROJECT_NAME}
   SOURCES
-    src/*.cc
+      src/*.cc
+      include/*.h
   INCLUDE_DIRS
     include
   USES

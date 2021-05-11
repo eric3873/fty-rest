@@ -37,7 +37,7 @@
 
 #include <fty_common_rest_helpers.h>
 #include <fty_common_db_asset.h>
-#include <fty_common_mlm_tntmlm.h>
+#include "mlm_client.h"
 #include <fty_common_asset_types.h>
 #include <fty_common_macros.h>
 #include <fty_common_utf8.h>
@@ -82,19 +82,19 @@ s_total_rack_power(
 
 //    zuuid_t *uuid = zuuid_new ();
 //    zmsg_t *request = s_rt_encode_GET (name.c_str(), uuid);
-//    int rv = client->sendto ("fty-metric-cache", "latest-rt-data", 1000, &request);
+//    int rv = client.sendto ("fty-metric-cache", "latest-rt-data", 1000, &request);
 //    if (rv == -1) {
 //        zuuid_destroy (&uuid);
 //        log_fatal (
-//                "client->sendto (address = '%s', subject = '%s') failed",
+//                "client.sendto (address = '%s', subject = '%s') failed",
 //                "fty-metric-cache", "latest-rt-data");
-//        throw std::runtime_error (TRANSLATE_ME ("client->sendto () failed."));
+//        throw std::runtime_error (TRANSLATE_ME ("client.sendto () failed."));
 //    }
 //
-//    zmsg_t *msg = client->recv (zuuid_str_canonical (uuid), 5);
+//    zmsg_t *msg = client.recv (zuuid_str_canonical (uuid), 5);
 //    zuuid_destroy (&uuid);
 //    if (!msg) {
-//        throw std::runtime_error (TRANSLATE_ME ("client->recv () returned NULL."));
+//        throw std::runtime_error (TRANSLATE_ME ("client.recv () returned NULL."));
 //    }
 //
 //    char *result = zmsg_popstr (msg);

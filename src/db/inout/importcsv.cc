@@ -39,7 +39,7 @@
 #include <fty_common_rest.h>
 #include <fty_common_db_dbpath.h>
 #include <fty_common_db.h>
-#include <fty_common_mlm_tntmlm.h>
+#include "mlm_client.h"
 #include <fty_common_mlm_sync_client.h>
 #include <fty_asset_activator.h>
 
@@ -599,7 +599,7 @@ void get_licensing_limitation(LIMITATIONS_STRUCT &limitations)
     limitations.max_active_power_devices = -1;
     limitations.global_configurability = 0;
     // query values
-    MlmClientPool::Ptr client_ptr = mlm_pool.get ();
+    auto client_ptr = getMlmClient();
     zmsg_t *request = zmsg_new();
     zmsg_addstr (request, "LIMITATION_QUERY");
     zuuid_t *zuuid = zuuid_new ();
@@ -607,7 +607,7 @@ void get_licensing_limitation(LIMITATIONS_STRUCT &limitations)
     zmsg_addstr (request, zuuid_str);
     zmsg_addstr (request, "*");
     zmsg_addstr (request, "*");
-    int rv = client_ptr->sendto ("etn-licensing", "LIMITATION_QUERY", 1000, &request);
+    int rv = client_ptr.sendto ("etn-licensing", "LIMITATION_QUERY", 1000, &request);
     if (rv == -1) {
         zuuid_destroy (&zuuid);
         zmsg_destroy (&request);
@@ -616,7 +616,7 @@ void get_licensing_limitation(LIMITATIONS_STRUCT &limitations)
         bios_throw ("internal-error", err.c_str ());
     }
 
-    zmsg_t *response = client_ptr->recv (zuuid_str, 30);
+    zmsg_t *response = client_ptr.recv (zuuid_str, 30);
     zuuid_destroy (&zuuid);
     if (!response) {
         log_fatal ("client->recv (timeout = '30') returned NULL for LIMITATION_QUERY");

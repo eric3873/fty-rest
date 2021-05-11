@@ -673,7 +673,6 @@ void
     if (rv != 0)
         throw std::runtime_error(msg.c_str());
 
-    serializer.inputUtf8(true);
     serializer.serialize(si).finish();
     transaction.commit();
 }

@@ -27,7 +27,7 @@
 #include <fty_common_macros.h>
 #include <fty_common_rest_helpers.h>
 #include <fty_common_rest_utils_web.h>
-#include <fty_common_mlm_tntmlm.h>
+#include "mlm_client.h"
 #include <fty_common_mlm_subprocess.h>
 #include <fty_common_mlm_guards.h>
 #include <fty_common_agents.h>
@@ -274,24 +274,24 @@ UserInfo user;
             uuid);
     for (const std::string& path: paths)
         zmsg_addstr (send, path.c_str ());
-    int rv = client->sendto (AGENT_FTY_EMAIL_SENDMAIL_ONLY, "SENDMAIL", 1000, &send);
+    int rv = client.sendto (AGENT_FTY_EMAIL_SENDMAIL_ONLY, "SENDMAIL", 1000, &send);
 
     if (rv == -1)
     {
         log_fatal (
-                    "Error: client->sendto (address = '%s', subject = '%s', timeout = 1000) failed.",
+                    "Error: client.sendto (address = '%s', subject = '%s', timeout = 1000) failed.",
                         AGENT_FTY_EMAIL_SENDMAIL_ONLY, "SENDMAIL");
         s_rm_rf (paths, &temp_dir);
-        std::string err =  TRANSLATE_ME ("client->sendto () failed");
+        std::string err =  TRANSLATE_ME ("client.sendto () failed");
         zmsg_destroy (&send);
         log_error_audit ("Request CREATE email_feedback FAILED");
         http_die ("internal-error", err.c_str ());
     }
 
-    ZmsgGuard recieve (client->recv (zuuid_str_canonical (uuid) , _timeout));
+    ZmsgGuard recieve (client.recv (zuuid_str_canonical (uuid) , _timeout));
     if (!recieve)
     {
-        std::string msg = TRANSLATE_ME ("Error: client-> recv (timeout = '%d') returned NULL", _timeout);
+        std::string msg = TRANSLATE_ME ("Error: client. recv (timeout = '%d') returned NULL", _timeout);
         log_error ("%s", msg.c_str ());
         s_rm_rf (paths, &temp_dir);
         log_error_audit ("Request CREATE email_feedback FAILED");
@@ -300,7 +300,7 @@ UserInfo user;
 
     ZstrGuard err_code (zmsg_popstr (recieve));
     ZstrGuard err_message (zmsg_popstr (recieve));
-    const char *msg_subject = client->subject ();
+    const char *msg_subject = client.subject ();
     std::string status;
     s_rm_rf (paths, &temp_dir);
 
@@ -319,7 +319,7 @@ UserInfo user;
     {
         status = "Failed";
         log_fatal ("Error: message recieved with invalid subject.");
-        std::string err =  TRANSLATE_ME ("client->recv () invalid message subject");
+        std::string err =  TRANSLATE_ME ("client.recv () invalid message subject");
         log_error_audit ("Request CREATE email_feedback FAILED");
         http_die ("internal-error", err.c_str ());
     }

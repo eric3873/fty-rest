@@ -25,7 +25,7 @@
  #><%pre>
 #include <string>
 #include <fty_common_macros.h>
-#include <fty_common_mlm_tntmlm.h>
+#include "mlm_client.h"
 #include <fty_common_rest_helpers.h>
 #include <fty_common_db_asset.h>
 #include <fty_common_rest_audit_log.h>
@@ -46,7 +46,7 @@ int
 gpo_action (std::string sensor, std::string action)
 {
     // connect to mlm client
-    MlmClientPool::Ptr client = mlm_pool.get ();
+    auto client = getMlmClient();
     if (!client.getPointer ())
     {
         log_fatal ("gpo_action: mlm_pool.get () failed.");
@@ -55,20 +55,20 @@ gpo_action (std::string sensor, std::string action)
 
     zuuid_t *uuid = zuuid_new ();
     zmsg_t *request = req_gpo_interaction (uuid, sensor, action);
-    int rv = client->sendto ("fty-sensor-gpio", "GPO_INTERACTION", 1000, &request);
+    int rv = client.sendto ("fty-sensor-gpio", "GPO_INTERACTION", 1000, &request);
 
     if (rv == -1)
     {
         zuuid_destroy (&uuid);
-        log_fatal ("gpo_action: client->sendto (address = '%s') failed.", "fty-sensor-gpio");
+        log_fatal ("gpo_action: client.sendto (address = '%s') failed.", "fty-sensor-gpio");
         return -2;
     }
 
-    zmsg_t *resp = client->recv (zuuid_str_canonical (uuid), 5);
+    zmsg_t *resp = client.recv (zuuid_str_canonical (uuid), 5);
     zuuid_destroy (&uuid);
     if (!resp)
     {
-        log_fatal ("gpo_action: client->recv (timeout = '5') returned NULL");
+        log_fatal ("gpo_action: client.recv (timeout = '5') returned NULL");
         return -3;
     }
     char *result = zmsg_popstr (resp);
@@ -174,13 +174,13 @@ UserInfo user;
     }
     else
     if (rv == -2) {
-        std::string err =  TRANSLATE_ME ("client->sendto () failed.");
+        std::string err =  TRANSLATE_ME ("client.sendto () failed.");
         log_error_audit ("Request CREATE gpo_action sensor %s FAILED", checked_sensor.c_str ());
         http_die ("internal-error", err.c_str ());
     }
     else
     if (rv == -3) {
-        std::string err =  TRANSLATE_ME ("client->recv () failed.");
+        std::string err =  TRANSLATE_ME ("client.recv () failed.");
         log_error_audit ("Request CREATE gpo_action sensor %s FAILED", checked_sensor.c_str ());
         http_die ("internal-error", err.c_str ());
     }
