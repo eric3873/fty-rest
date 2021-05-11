@@ -46,7 +46,7 @@ get_scan_progress (std::string &output)
 
     // connect to mlm client
     auto client = getMlmClient();
-    if (!client.getPointer ())
+    if (!client)
     {
         log_fatal ("scan_progress: mlm_pool.get () failed.");
         return -1;

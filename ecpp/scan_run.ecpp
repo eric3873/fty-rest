@@ -102,8 +102,8 @@ int
 run_scan ()
 {
      // connect to mlm client
-    MlmClientPool::Ptr client = mlm_pool.get ();
-    if (!client.getPointer ()) {
+    auto client = getMlmClient();
+    if (!client) {
         log_fatal ("run_scan: mlm_pool.get () failed.");
         return -1;
     }

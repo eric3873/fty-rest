@@ -154,7 +154,7 @@ UserInfo user;
 
     // connect to mlm client
     auto client = getMlmClient();
-    if (!client.getPointer ()) {
+    if (!client) {
         log_fatal ("Error: mlm_pool.get () failed.");
         std::string err =  TRANSLATE_ME ("mlm_pool.get () failed.");
         log_error_audit ("Request CREATE email_test FAILED");

@@ -114,7 +114,7 @@ get_list (std::string &output)
 
     // connect to mlm client
     auto client = getMlmClient();
-    if (!client.getPointer ())
+    if (!client)
     {
         log_fatal ("list_gpio: mlm_pool.get () failed.");
         return -1;

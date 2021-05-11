@@ -253,8 +253,8 @@ UserInfo user;
     }
 
     // connect to mlm client
-    MlmClientPool::Ptr client = mlm_pool.get ();
-    if (!client.getPointer ()) {
+    auto client = getMlmClient();
+    if (!client) {
         log_fatal ("Error: mlm_pool.get () failed.");
         s_rm_rf (paths, &temp_dir);
         std::string err =  TRANSLATE_ME ("mlm_pool.get () failed.");

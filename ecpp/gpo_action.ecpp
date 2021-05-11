@@ -47,7 +47,7 @@ gpo_action (std::string sensor, std::string action)
 {
     // connect to mlm client
     auto client = getMlmClient();
-    if (!client.getPointer ())
+    if (!client)
     {
         log_fatal ("gpo_action: mlm_pool.get () failed.");
         return -1;

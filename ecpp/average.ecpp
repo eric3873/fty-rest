@@ -222,7 +222,7 @@ bool database_ready;
     }
     // connect to malamute
     auto client = getMlmClient();
-    if (!client.getPointer ()) {
+    if (!client) {
         log_fatal ("mlm_pool.get () failed.");
         std::string err =  TRANSLATE_ME ("mlm_pool.get () failed.");
         http_die ("internal-error", err.c_str ());

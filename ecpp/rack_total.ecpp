@@ -58,7 +58,7 @@ static const std::map<std::string, const std::string> PARAM_TO_SRC = {
 
 static double
 s_total_rack_power(
-    MlmClientPool::Ptr client,
+    ClientHolder& client,
     const std::string& src,
     const std::string& name)
 {
@@ -215,8 +215,8 @@ std::string checked_arg2;
 
     // ##################################################
     // connect to malamute
-    MlmClientPool::Ptr client = mlm_pool.get ();
-    if (!client.getPointer ()) {
+    auto client = getMlmClient();
+    if (!client) {
         log_fatal ("mlm_pool.get () failed");
         std::string err =  TRANSLATE_ME ("mlm_pool.get () failed.");
         http_die ("internal-error", err.c_str ());
