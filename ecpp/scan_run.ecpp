@@ -25,7 +25,7 @@
  #><%pre>
 #include <string>
 #include <fty_common_macros.h>
-#include "mlm_client.h"
+#include <fty_common_mlm_pool.h>
 #include <fty_common_mlm_guards.h>
 #include <fty_common_rest_helpers.h>
 #include <cxxtools/jsondeserializer.h>
@@ -55,7 +55,7 @@ int
 stop_scan ()
 {
     // connect to mlm client
-    auto client = getMlmClient();
+    auto client = mlm_pool.get();
     if (!client)
     {
         log_fatal ("stop_scan: mlm_pool.get () failed.");
@@ -65,20 +65,20 @@ stop_scan ()
     zuuid_t *uuid = zuuid_new ();
     zmsg_t *request = req_stop (uuid);
 
-    int rv = client.sendto ("fty-discovery", "stopscan", 1000, &request);
+    int rv = client->sendto ("fty-discovery", "stopscan", 1000, &request);
 
     if (rv == -1)
     {
         zuuid_destroy (&uuid);
-        log_fatal ("stop_scan: client.sendto (address = '%s') failed.", "fty-discovery");
+        log_fatal ("stop_scan: client->sendto (address = '%s') failed.", "fty-discovery");
         return -2;
     }
 
-    ZmsgGuard resp (client.recv (zuuid_str_canonical (uuid), 5));
+    ZmsgGuard resp (client->recv (zuuid_str_canonical (uuid), 5));
     zuuid_destroy (&uuid);
     if (!resp)
     {
-        log_fatal ("stop_scan: client.recv (timeout = '20') returned NULL");
+        log_fatal ("stop_scan: client->recv (timeout = '20') returned NULL");
         return -3;
     }
     ZstrGuard result (zmsg_popstr (resp));
@@ -102,7 +102,7 @@ int
 run_scan ()
 {
      // connect to mlm client
-    auto client = getMlmClient();
+    auto client = mlm_pool.get();
     if (!client) {
         log_fatal ("run_scan: mlm_pool.get () failed.");
         return -1;
@@ -111,18 +111,18 @@ run_scan ()
     zuuid_t *uuid = zuuid_new ();
     zmsg_t *request = req_scan (uuid);
 
-    int rv = client.sendto ("fty-discovery", "LAUNCHSCAN", 1000, &request);
+    int rv = client->sendto ("fty-discovery", "LAUNCHSCAN", 1000, &request);
 
     if (rv == -1) {
         zuuid_destroy (&uuid);
-        log_fatal ("run_scan: client.sendto (address = '%s') failed.", "fty-discovery");
+        log_fatal ("run_scan: client->sendto (address = '%s') failed.", "fty-discovery");
         return -2;
     }
 
-    zmsg_t *resp = client.recv (zuuid_str_canonical (uuid), 5);
+    zmsg_t *resp = client->recv (zuuid_str_canonical (uuid), 5);
     zuuid_destroy (&uuid);
     if (!resp) {
-        log_fatal ("run_scan: client.recv (timeout = '5') returned NULL");
+        log_fatal ("run_scan: client->recv (timeout = '5') returned NULL");
         return -3;
     }
     char *result = zmsg_popstr (resp);
@@ -197,13 +197,13 @@ UserInfo user;
     }
     else
     if (rv == -2) {
-        std::string err =  TRANSLATE_ME ("client.sendto () failed.");
+        std::string err =  TRANSLATE_ME ("client->sendto () failed.");
         log_error_audit ("Request %s scan_run FAILED", request.getMethod () == "POST" ? "CREATE" : "DELETE");
         http_die ("internal-error", err.c_str ());
     }
     else
     if (rv == -3) {
-        std::string err =  TRANSLATE_ME ("client.recv () failed.");
+        std::string err =  TRANSLATE_ME ("client->recv () failed.");
         log_error_audit ("Request %s scan_run FAILED", request.getMethod () == "POST" ? "CREATE" : "DELETE");
         http_die ("internal-error", err.c_str ());
     }

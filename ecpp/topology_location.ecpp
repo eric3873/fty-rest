@@ -27,7 +27,7 @@
 #include <fty_common_macros.h>
 #include <fty_common_rest_helpers.h>
 #include <fty_common_db.h>
-#include "mlm_client.h"
+#include <fty_common_mlm_pool.h>
 
 // set S with MSG popped frame (S unchanged if NULL frame)
 static void zmsg_pop_s (zmsg_t *msg, std::string & s)
@@ -199,7 +199,7 @@ bool database_ready;
     }
 
     // connect to mlm client
-    auto client = getMlmClient();
+    auto client = mlm_pool.get();
     if (!client) {
         log_error ("mlm_pool.get () failed");
         std::string err = TRANSLATE_ME("Connection to mlm client failed.");
@@ -218,14 +218,14 @@ bool database_ready;
     zmsg_addstr (req, parameter_name.c_str ());
     zmsg_addstr (req, asset_id.c_str ());
     if (!options.empty()) zmsg_addstr (req, options.c_str ());
-    zmsg_t *resp = client.requestreply (ADDRESS, SUBJECT, TIMEOUT, &req);
+    zmsg_t *resp = client->requestreply (ADDRESS, SUBJECT, TIMEOUT, &req);
     zmsg_destroy (&req);
 
     #define CLEANUP { zmsg_destroy (&resp); }
 
     if (!resp) {
         CLEANUP;
-        log_error ("client.requestreply (timeout = %d s) failed", TIMEOUT);
+        log_error ("client->requestreply (timeout = %d s) failed", TIMEOUT);
         std::string err = TRANSLATE_ME("Request to mlm client failed (timeout reached).");
         http_die ("internal-error", err.c_str());
     }

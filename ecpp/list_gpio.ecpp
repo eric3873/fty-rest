@@ -25,7 +25,7 @@
  #><%pre>
 #include <string>
 #include <fty_common_macros.h>
-#include "mlm_client.h"
+#include <fty_common_mlm_pool.h>
 #include <fty_common_rest_helpers.h>
 
 
@@ -113,7 +113,7 @@ get_list (std::string &output)
     output.clear();
 
     // connect to mlm client
-    auto client = getMlmClient();
+    auto client = mlm_pool.get();
     if (!client)
     {
         log_fatal ("list_gpio: mlm_pool.get () failed.");
@@ -122,29 +122,29 @@ get_list (std::string &output)
 
     zuuid_t *uuid = zuuid_new ();
     zmsg_t *request = req_list (uuid);
-    int rv = client.sendto ("fty-sensor-gpio", "GPIO_MANIFEST", 1000, &request);
+    int rv = client->sendto ("fty-sensor-gpio", "GPIO_MANIFEST", 1000, &request);
 
     if (rv == -1)
     {
         zuuid_destroy (&uuid);
-        log_fatal ("list_gpio: client.sendto (address = '%s') failed.", "fty-sensor-gpio");
+        log_fatal ("list_gpio: client->sendto (address = '%s') failed.", "fty-sensor-gpio");
         return -2;
     }
 
-    zmsg_t *resp = client.recv (zuuid_str_canonical (uuid), 5);
+    zmsg_t *resp = client->recv (zuuid_str_canonical (uuid), 5);
     zuuid_destroy (&uuid);
     if (!resp)
     {
-        log_fatal ("info: client.recv (timeout = '5') returned NULL");
+        log_fatal ("info: client->recv (timeout = '5') returned NULL");
         return -3;
     }
     char *result = zmsg_popstr (resp);
     if (result) {
         if (streq (result, "OK")) {
-            int rv = s_handle_response (resp, output);
+            int rv1 = s_handle_response (resp, output);
             zstr_free (&result);
             zmsg_destroy(&resp);
-            return rv;
+            return rv1;
         }
         else {
             zstr_free (&result);
@@ -178,12 +178,12 @@ UserInfo user;
     }
     else
     if (rv == -2) {
-        std::string err =  TRANSLATE_ME ("client.sendto () failed.");
+        std::string err =  TRANSLATE_ME ("client->sendto () failed.");
         http_die ("internal-error", err.c_str ());
     }
     else
     if (rv == -3) {
-        std::string err =  TRANSLATE_ME ("client.recv () failed.");
+        std::string err =  TRANSLATE_ME ("client->recv () failed.");
         http_die ("internal-error", err.c_str ());
     }
     else
