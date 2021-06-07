@@ -96,6 +96,7 @@ EXTRA_DIST += \
     src/web/src/admin_sse.h \
     src/web/src/alert_ack.h \
     src/web/src/alert_list.h \
+    src/web/src/alert_assets_states_counter.h \
     src/web/src/alert_rules_detail.h \
     src/web/src/alert_rules.h \
     src/web/src/alert_rules_list.h \
@@ -111,6 +112,7 @@ EXTRA_DIST += \
     src/web/src/asset_POST.h \
     src/web/src/asset_PUT.h \
     src/web/src/assets_in.h \
+    src/web/src/assets_in_counter.h \
     src/web/src/auth.h \
     src/web/src/auth_verify.h \
     src/web/src/average.h \

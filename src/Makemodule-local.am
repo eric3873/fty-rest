@@ -152,6 +152,7 @@ ECPPFILES= \
   web/src/admin_sse.ecpp \
   web/src/alert_ack.ecpp \
   web/src/alert_list.ecpp \
+  web/src/alert_assets_states_counter.ecpp \
   web/src/alert_rules_detail.ecpp \
   web/src/alert_rules.ecpp \
   web/src/alert_rules_list.ecpp \
@@ -164,6 +165,7 @@ ECPPFILES= \
   web/src/asset_POST.ecpp \
   web/src/asset_PUT.ecpp \
   web/src/assets_in.ecpp \
+  web/src/assets_in_counter.ecpp \
   web/src/asset_actions_GET.ecpp \
   web/src/asset_actions_POST.ecpp \
   web/src/auth.ecpp \

@@ -97,6 +97,10 @@ typedef struct _web_src_alert_ack_t web_src_alert_ack_t;
 typedef struct _web_src_alert_list_t web_src_alert_list_t;
 #define WEB_SRC_ALERT_LIST_T_DEFINED
 #endif
+#ifndef WEB_SRC_ALERT_ASSETS_STATES_COUNTER_T_DEFINED
+typedef struct _web_src_alert_assets_states_counter_t web_src_alert_assets_states_counter_t;
+#define WEB_SRC_ALERT_ASSETS_STATES_COUNTER_T_DEFINED
+#endif
 #ifndef WEB_SRC_ALERT_RULES_DETAIL_T_DEFINED
 typedef struct _web_src_alert_rules_detail_t web_src_alert_rules_detail_t;
 #define WEB_SRC_ALERT_RULES_DETAIL_T_DEFINED
@@ -156,6 +160,10 @@ typedef struct _web_src_asset_put_t web_src_asset_put_t;
 #ifndef WEB_SRC_ASSETS_IN_T_DEFINED
 typedef struct _web_src_assets_in_t web_src_assets_in_t;
 #define WEB_SRC_ASSETS_IN_T_DEFINED
+#endif
+#ifndef WEB_SRC_ASSETS_IN_COUNTER_T_DEFINED
+typedef struct _web_src_assets_in_counter_t web_src_assets_in_counter_t;
+#define WEB_SRC_ASSETS_IN_COUNTER_T_DEFINED
 #endif
 #ifndef WEB_SRC_AUTH_T_DEFINED
 typedef struct _web_src_auth_t web_src_auth_t;
@@ -338,6 +346,7 @@ typedef struct _web_src_hw_capability_t web_src_hw_capability_t;
 #include "web/src/admin_sse.h"
 #include "web/src/alert_ack.h"
 #include "web/src/alert_list.h"
+#include "web/src/alert_assets_states_counter.h"
 #include "web/src/alert_rules_detail.h"
 #include "web/src/alert_rules.h"
 #include "web/src/alert_rules_list.h"
@@ -353,6 +362,7 @@ typedef struct _web_src_hw_capability_t web_src_hw_capability_t;
 #include "web/src/asset_POST.h"
 #include "web/src/asset_PUT.h"
 #include "web/src/assets_in.h"
+#include "web/src/assets_in_counter.h"
 #include "web/src/auth.h"
 #include "web/src/auth_verify.h"
 #include "web/src/average.h"

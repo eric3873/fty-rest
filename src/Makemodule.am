@@ -29,6 +29,7 @@ src_libfty_rest_la_SOURCES = \
     src/web/src/admin_sse.cc \
     src/web/src/alert_ack.cc \
     src/web/src/alert_list.cc \
+    src/web/src/alert_assets_states_counter.cc \
     src/web/src/alert_rules_detail.cc \
     src/web/src/alert_rules.cc \
     src/web/src/alert_rules_list.cc \
@@ -44,6 +45,7 @@ src_libfty_rest_la_SOURCES = \
     src/web/src/asset_POST.cc \
     src/web/src/asset_PUT.cc \
     src/web/src/assets_in.cc \
+    src/web/src/assets_in_counter.cc \
     src/web/src/auth.cc \
     src/web/src/auth_verify.cc \
     src/web/src/average.cc \

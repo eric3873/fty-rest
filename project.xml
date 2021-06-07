@@ -226,6 +226,7 @@
     <class name = "web/src/alert_ack" private = "1" selftest = "0">root object</class>
 
     <class name = "web/src/alert_list" private = "1" selftest = "0">root object</class>
+    <class name = "web/src/alert_assets_states_counter" private = "1" selftest = "0">root object</class>
     <class name = "web/src/alert_rules_detail" private = "1" selftest = "0">root object</class>
     <class name = "web/src/alert_rules" private = "1" selftest = "0">root object</class>
     <class name = "web/src/alert_rules_list" private = "1" selftest = "0">root object</class>
@@ -243,6 +244,7 @@
 
     <class name = "web/src/asset_PUT" private = "1" selftest = "0">root object</class>
     <class name = "web/src/assets_in" private = "1" selftest = "0">root object</class>
+    <class name = "web/src/assets_in_counter" private = "1" selftest = "0">root object</class>
     <class name = "web/src/auth" private = "1" selftest = "0">root object</class>
     <class name = "web/src/auth_verify" private = "1" selftest = "0">root object</class>
     <class name = "web/src/average" private = "1" selftest = "0">root object</class>
