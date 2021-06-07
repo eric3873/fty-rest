@@ -25,6 +25,7 @@ etn_target(static ${PROJECT_NAME}-lib
         -Wno-format-nonliteral
     USES
         fty-cmake-rest
+        fty-utils
         cidr
         magic
         cxxtools

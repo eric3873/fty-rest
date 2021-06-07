@@ -66,7 +66,7 @@ uint16_t upsstatus_single_status_to_int(char* status)
 
 uint16_t upsstatus_to_int(const char* status)
 {
-    uint16_t      result = 0;
+    int           result = 0;
     _scoped_char* buff   = strdup(status);
     char*         b      = buff;
     char*         e;
@@ -84,7 +84,7 @@ uint16_t upsstatus_to_int(const char* status)
         b = e;
     }
     FREE0(buff)
-    return result;
+    return uint16_t(result);
 }
 
 uint16_t upsstatus_to_int(const std::string& status)
