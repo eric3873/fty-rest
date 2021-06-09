@@ -171,6 +171,7 @@ bool database_ready;
         }
 
         // check configured
+        // note: the value "all" deactivate the option
         if (!configured.empty() && std::find(checked_configured.begin(), checked_configured.end(), configured) == checked_configured.end()) {
             std::string expected = TRANSLATE_ME ("valid configured is all, no or yes");
             http_die ("request-param-bad", "configured", configured.c_str(), expected.c_str());
@@ -196,7 +197,7 @@ bool database_ready;
     int counter = 0;
     try {
         counter = assets_in_count_container(connection, checked_id, checked_types, checked_subtypes, checked_capabilities, without, status, configured);
-    } catch (std::exception &e) {
+    } catch (const std::exception &e) {
         std::string err = JSONIFY (e.what());
         http_die ("internal-error", err.c_str ());
     }
