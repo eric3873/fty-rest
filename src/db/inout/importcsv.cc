@@ -35,7 +35,7 @@
 #include <algorithm>
 #include <cstddef>
 #include <ctype.h>
-#include <fty/split.h>
+#include <fty/string-utils.h>
 #include <fty_asset_activator.h>
 #include <fty_common_db.h>
 #include <fty_common_db_dbpath.h>

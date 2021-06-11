@@ -26,7 +26,7 @@
 #include <vector>
 #include <string>
 #include <functional>
-#include <fty/split.h>
+#include <fty/string-utils.h>
 #include <mutex>
 #include <thread>
 #include <chrono>
