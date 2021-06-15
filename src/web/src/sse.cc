@@ -25,6 +25,7 @@
  */
 #include <fty_common_rest.h>
 #include <fty_common_mlm_utils.h>
+#include <fty_common_asset_types.h>
 #include "web/src/sse.h"
 #include "shared/data.h"
 #include "shared/utils_json.h"
