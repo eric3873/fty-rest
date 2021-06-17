@@ -36,7 +36,7 @@
 #include <fty_common_db_asset.h>
 #include <fty_common_macros.h>
 #include "shared/utilspp.h"
-#include "src/db/inout.h"
+#include "db/inout.h"
 
 int
     assets_in_count_container(
